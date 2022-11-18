@@ -33,15 +33,17 @@ SELECT
     sum(case when percentile between 31 and 40 then 1 else 0 end) desil4,
     sum(case when percentile > 40 then 1 else 0 end) "desil4+"    
 FROM
-    (SELECT DISTINCT ON (b.idbdt)
-        a.percentile,
-        b.*,
+    (SELECT 
+        DISTINCT b.idbdt,
+        b.kdkab,
+        b.jnskel,
+        percentile
     FROM
         krts a JOIN arts b ON a.idbdt = b.idbdt
     WHERE
-        b.jnskel = 2
+        b.jnskel = 2 and b.hub_krt = 1
     ORDER BY
-        b.idbdt, b.hub_krt) t
+        b.idbdt, b.idartbdt, b.hub_krt) t
 GROUP BY
     1
 
@@ -97,9 +99,13 @@ WHERE
 -- 6) Jumlah pend miskin dan rentan miskin usia 15-59 tahun yang bekerja menurut lapangan usaha per kabkota
 SELECT
     kdkab,
-    sum(case when lapangan_usaha = 1 then 1 else 0 end) pertanian,
-    sum(case when lapangan_usaha = 1 then 1 else 0 end) pertanian,
-    
+    sum(case when lapangan_usaha in (1, 2, 3, 7) then 1 else 0 end) pertanian_perkebunan,
+    sum(case when lapangan_usaha in (4, 5) then 1 else 0 end) perikanan,
+    sum(case when lapangan_usaha = 6 then 1 else 0 end) peternakan,
+    sum(case when lapangan_usaha = 8 then 1 else 0 end) pertambangan,
+    sum(case when lapangan_usaha = 9 then 1 else 0 end) industri_pengolahan,
+    sum(case when lapangan_usaha = 12 then 1 else 0 end) perdagangan,
+    sum(case when lapangan_usaha = 20 then 1 else 0 end) pemulung
 FROM
     krts a JOIN arts b ON a.idbdt = b.idbdt
 WHERE

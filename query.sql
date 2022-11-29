@@ -68,6 +68,24 @@ WHERE
 GROUP BY
     1
 
+-- Usia produktif dan nonproduktif
+SELECT
+    sum(case when percentile between 0 and 10 and jnskel = 1 then 1 else 0 end) L_desil1,
+    sum(case when percentile between 0 and 10 and jnskel = 2 then 1 else 0 end) P_desil1,
+    sum(case when percentile between 11 and 20 and jnskel = 1 then 1 else 0 end) L_desil2,
+    sum(case when percentile between 11 and 20 and jnskel = 2 then 1 else 0 end) P_desil2,
+    sum(case when percentile between 21 and 30 and jnskel = 1 then 1 else 0 end) L_desil3,
+    sum(case when percentile between 21 and 30 and jnskel = 2 then 1 else 0 end) P_desil3,
+    sum(case when percentile between 31 and 40 and jnskel = 1 then 1 else 0 end) L_desil4,
+    sum(case when percentile between 31 and 40 and jnskel = 2 then 1 else 0 end) P_desil4,
+    sum(case when percentile > 40 and jnskel = 1 then 1 else 0 end) 'L_desil4+',
+    sum(case when percentile > 40 and jnskel = 2 then 1 else 0 end) 'P_desil4+'
+FROM
+    krts a JOIN arts b ON a.idbdt = b.idbdt
+WHERE
+    (umur+1) between 15 and 64
+    -- ((umur+1) between 0 and 14) and ((umur+1) > 64)
+
 -- 4) Jumlah anak dari rumah tangga miskin dan rentan miskin yang tidak bersekolah usia 7-18 tahun per kabkota
 SELECT
     kdkab,
@@ -110,6 +128,21 @@ FROM
     krts a JOIN arts b ON a.idbdt = b.idbdt
 WHERE
     ((umur+1) between 15 and 59) and sta_bekerja = 1
+
+-- Perdesil
+SELECT
+    sum(case when lapangan_usaha in (1, 2, 3, 7) then 1 else 0 end) pertanian_perkebunan,
+    sum(case when lapangan_usaha in (4, 5) then 1 else 0 end) perikanan,
+    sum(case when lapangan_usaha = 6 then 1 else 0 end) peternakan,
+    sum(case when lapangan_usaha = 8 then 1 else 0 end) pertambangan,
+    sum(case when lapangan_usaha = 9 then 1 else 0 end) industri_pengolahan,
+    sum(case when lapangan_usaha = 12 then 1 else 0 end) perdagangan,
+    sum(case when lapangan_usaha = 20 then 1 else 0 end) pemulung
+FROM
+    krts a JOIN arts b ON a.idbdt = b.idbdt
+WHERE
+    ((umur+1) between 15 and 59) and sta_bekerja = 1 
+    and (percentile between 0 and 10)
 
 -- 7) Jumlah RT miskin dan rentan miskin yang mempunyai rutilahu per kabkota
 SELECT

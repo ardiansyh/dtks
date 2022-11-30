@@ -144,6 +144,35 @@ WHERE
     ((umur+1) between 15 and 59) and sta_bekerja = 1 
     and (percentile between 0 and 10)
 
+-- Revision
+SELECT
+    kdkab,
+    sum(case when lapangan_usaha in (1, 2, 7) then 1 else 0 end) pertanian_hortikultura_kehutanan,
+    sum(case when lapangan_usaha = 3 then 1 else 0 end) perkebunan,
+    sum(case when lapangan_usaha in (4, 5) then 1 else 0 end) perikanan,
+    sum(case when lapangan_usaha = 6 then 1 else 0 end) peternakan,
+    sum(case when lapangan_usaha = 8 then 1 else 0 end) pertambangan,
+    sum(case when lapangan_usaha = 9 then 1 else 0 end) industri_pengolahan,
+    sum(case when lapangan_usaha = 12 then 1 else 0 end) perdagangan
+FROM
+    krts a JOIN arts b ON a.idbdt = b.idbdt
+WHERE
+    ((umur+1) between 15 and 59) and sta_bekerja = 1
+
+SELECT
+    sum(case when lapangan_usaha in (1, 2, 7) then 1 else 0 end) pertanian_hortikultura_kehutanan,
+    sum(case when lapangan_usaha = 3 then 1 else 0 end) perkebunan,
+    sum(case when lapangan_usaha in (4, 5) then 1 else 0 end) perikanan,
+    sum(case when lapangan_usaha = 6 then 1 else 0 end) peternakan,
+    sum(case when lapangan_usaha = 8 then 1 else 0 end) pertambangan,
+    sum(case when lapangan_usaha = 9 then 1 else 0 end) industri_pengolahan,
+    sum(case when lapangan_usaha = 12 then 1 else 0 end) perdagangan
+FROM
+    krts a JOIN arts b ON a.idbdt = b.idbdt
+WHERE
+    ((umur+1) between 15 and 59) and sta_bekerja = 1 
+    and (percentile between 0 and 10)
+
 -- 7) Jumlah RT miskin dan rentan miskin yang mempunyai rutilahu per kabkota
 SELECT
     kdkab,
